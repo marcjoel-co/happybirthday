@@ -206,7 +206,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     
     <script>
-        // Get all the elements we need to control
+        
         const startButton = document.getElementById('start-button');
         const container = document.querySelector('.container');
         const audioControls = document.querySelector('.audio-controls');
@@ -215,11 +215,11 @@
         const volumeControl = document.getElementById('volume');
         let isPlaying = false;
 
-        // Add click listener to the new start button
+        
         startButton.addEventListener('click', startExperience);
 
         function startExperience() {
-            // 1. Animate the start button away
+            
             gsap.to(startButton, { 
                 opacity: 0, 
                 scale: 0.5, 
@@ -228,13 +228,13 @@
                 onComplete: () => startButton.style.display = 'none' 
             });
 
-            // 2. Play audio
+           
             audio.play().catch(error => console.log("Audio play failed:", error));
 
-            // 3. Create a GSAP timeline for a choreographed sequence
-            const tl = gsap.timeline({ delay: 0.5 }); // Start after the button fades
+            
+            const tl = gsap.timeline({ delay: 0.5 }); 
 
-            // Fade in the container and audio controls at the same time
+            
             tl.to([container, audioControls], { 
                 opacity: 1, 
                 duration: 1, 
@@ -244,16 +244,16 @@
                     audioControls.style.pointerEvents = 'auto';
                 }
             })
-            // Then, bounce in the heading
+           
             .to('h1', { opacity: 1, scale: 1, duration: 1.5, ease: 'elastic.out(1, 0.5)' }, "-=0.5") // Overlap a bit
-            // Then, reveal the typewriter text
+            
             .to('.typewriter-container', { opacity: 1, duration: 0.5, onComplete: () => {
                 document.querySelector('.typewriter-text').style.animation = 'typewriter 3s steps(50) forwards';
-            }}, "-=1") // Overlap even more
-            // Finally, fade in the "Let's Go!" button
+            }}, "-=1") 
+            
             .to('.next-button', { opacity: 1, y: 0, duration: 1, ease: 'power2.out' });
 
-            // 4. Start the floating elements and the title sparkle
+            
             startAnimations();
         }
         
@@ -270,9 +270,7 @@
             });
         }
 
-        // --- All your existing helper and control functions remain below ---
-
-        // Audio Controls Logic
+     
         audio.volume = volumeControl.value;
 
         playPauseBtn.addEventListener('click', () => {
@@ -296,7 +294,7 @@
             audio.volume = volumeControl.value;
         });
 
-        // Navigation
+        
         function goToNextPage() {
             gsap.to('.next-button', {
                 scale: 1.2,
@@ -309,7 +307,7 @@
             });
         }
 
-        // Floating elements creation
+      
         function createFloatingElements() {
             const colors = ['#FF1493', '#8A2BE2', '#FFD700', '#FF4500', '#00BFFF', '#32CD32'];
             const elements = ['confetti', 'balloon', 'heart', 'star'];
@@ -349,7 +347,7 @@
                         ease: "power1.out",
                         onComplete: () => element.remove()
                     });
-                }, i * 100); // Staggered start times
+                }, i * 100); 
             }
         }
     </script>
