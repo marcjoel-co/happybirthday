@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Birthday Messages</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+       
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, #f8e1f4, #e0c3f7, #c2e6ff); background-size: 400% 400%; animation: gradientBackground 15s ease infinite; min-height: 100vh; overflow-x: hidden; position: relative; }
+
+        
+        .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; transition: opacity 1s ease, visibility 1s ease; color: #6a4c93; text-align: center; }
+        .start-screen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        .start-title { font-size: 3rem; margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); animation: pulse 2s infinite; }
+        .start-subtitle { font-size: 1.5rem; margin-bottom: 40px; opacity: 0.8; }
+        .start-button { background: linear-gradient(45deg, #6a4c93, #ff6b8a); border: none; color: white; font-size: 1.3rem; padding: 20px 40px; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 30px rgba(106, 76, 147, 0.4); transition: all 0.3s ease; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        .start-button:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(106, 76, 147, 0.6); }
+
+        /* Main Content Container */
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; opacity: 0; transform: translateY(20px); animation: fadeIn 1.5s forwards; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { font-size: 2.5rem; color: #6a4c93; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+
+        /* Letter Section */
+        .letter-counter { text-align: center; margin-bottom: 20px; color: #6a4c93; font-weight: bold; font-size: 1.1rem; }
+        
+        /* --- CHANGE: Letter container is now a flexbox for image layout --- */
+        .letter-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(106, 76, 147, 0.3);
+            margin-bottom: 30px;
+            min-height: 350px;
+            position: relative;
+        }
+        .letter { font-size: 1.2rem; line-height: 1.7; color: #333; flex: 2; /* Takes up more space */ }
+        
+        
+        .letter-image {
+            flex: 1; 
+            max-width: 35%;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            object-fit: cover;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .letter-image.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        
+        .letter-navigation { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; margin-bottom: 30px; }
+        .nav-button { background: rgba(255, 255, 255, 0.8); border: 2px solid #6a4c93; color: #6a4c93; border-radius: 50%; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(106, 76, 147, 0.2); }
+        .nav-button:hover:not(.disabled) { background: #6a4c93; color: white; transform: translateY(-2px); }
+        .nav-button.disabled { opacity: 0.4; cursor: not-allowed; }
+        .letter-progress { display: flex; gap: 8px; }
+        .progress-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(106, 76, 147, 0.3); transition: all 0.3s ease; cursor: pointer; }
+        .progress-dot.active { background: #6a4c93; transform: scale(1.3); }
+        .progress-dot:hover { background: #8e6ac5; }
+
+        /* Back Button */
+        .back-button-container { text-align: center; }
+        .back-button { display: inline-block; margin-top: 20px; padding: 10px 20px; background: rgba(255, 255, 255, 0.7); border: 2px solid #6a4c93; color: #6a4c93; border-radius: 30px; text-decoration: none; font-weight: bold; transition: all 0.3s ease; }
+        .back-button:hover { background: #6a4c93; color: white; }
+
+        /* Music & Floating Elements */
+        .music-controls { position: fixed; bottom: 20px; right: 20px; z-index: 100; background: rgba(255, 255, 255, 0.7); border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(106, 76, 147, 0.3); cursor: pointer; transition: all 0.3s ease; opacity: 0; pointer-events: none; }
+        .music-controls.show { opacity: 1; pointer-events: auto; }
+        .music-controls:hover { transform: scale(1.1); }
+        .music-controls i { color: #6a4c93; font-size: 24px; }
+        .floating-element { position: absolute; pointer-events: none; opacity: 0.7; z-index: 1; animation: float 15s ease-in-out infinite alternate; }
+        
+        
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        @keyframes gradientBackground { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 100% { transform: translateY(-40px) rotate(15deg); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+                @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 15px; }
+            .letter-container { 
+                flex-direction: column; 
+                padding: 20px; 
+                min-height: 400px; 
+            }
+            .letter-image {
+                max-width: 100%; 
+                margin-bottom: 20px; 
+            }
+            .letter { font-size: 1.1rem; }
+            .letter-navigation { padding: 0 10px; }
+            .nav-button { width: 50px; height: 50px; font-size: 1.2rem; }
+            .start-title { font-size: 2.5rem; }
+            .start-subtitle { font-size: 1.2rem; }
+            .start-button { font-size: 1.1rem; padding: 15px 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="start-screen" id="start-screen">
+        <div class="start-content">
+            <h1 class="start-title">🎉 Special Birthday Messages 🎂</h1>
+            <p class="start-subtitle">For someone truly amazing...</p>
+            <button class="start-button" id="start-button">✨ Start the Magic ✨</button>
+        </div>
+    </div>
+
+    <div class="container" id="main-container" style="display: none;">
+        <header>
+            <h1>Hi sir Dela Cruz</h1>
+        </header>
+        <div class="letter-counter" id="letter-count"></div>
+        <div class="letter-navigation">
+            <button class="nav-button" id="prev-button"><i class="fas fa-chevron-left"></i></button>
+            <div class="letter-progress" id="progress-dots"></div>
+            <button class="nav-button" id="next-button"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="letter-container">
+            <!-- NEW: Image element is now here -->
+            <img id="letter-image" class="letter-image" src="" alt="A special memory">
+            <div class="letter" id="typed-text"></div>
+        </div>
+        <div class="back-button-container">
+            <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Main Page</a>
+        </div>
+    </div>
+
+    <div class="music-controls" id="music-toggle">
+        <i class="fas fa-volume-mute" id="music-icon"></i>
+    </div>
+
+    <audio id="click-sound" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3?filename=cute-notification-ringtone-1-173850.mp3" preload="auto"></audio>
+    <audio id="background-music" src="gary.mp3" loop></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+           
+            const startButton = document.getElementById('start-button');
+            const mainContainer = document.getElementById('main-container');
+            const musicControls = document.getElementById('music-toggle');
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            const progressContainer = document.getElementById('progress-dots');
+            const letterCountEl = document.getElementById('letter-count');
+            const letterImageEl = document.getElementById('letter-image'); 
+            
+            const clickSound = document.getElementById('click-sound');
+            const backgroundMusic = document.getElementById('background-music');
+
+
+            let currentLetterIndex = 0;
+            let typedInstance = null;
+
+
+            const letters = [
+                {
+                    text: "My dearest friend,...<br><br>...You've been my shoulder to cry on, my partner in crime, and my biggest supporter.<br><br>Happy Birthday to my favorite person in the world!<br><br>With all my love,<br>Warren",
+                    image: null 
+                },
+                {
+                    text: "Dear Birthday Star! 🌟<br><br>Another year around the sun, and you just keep getting more amazing! Your kindness, your humor, and your incredible heart have touched so many lives.<br><br>Here's to more adventures, more laughter, and more memories together!<br><br>Cheers to you! 🎉<br>Warren",
+                    image: null 
+                },
+                {
+                    text: "Happy Birthday, Amazing Human! 🎂<br><br>If I could give you one gift today, it would be to see yourself through my eyes. You'd see someone who lights up every room they enter.<br><br>May this birthday be the beginning of your best year yet!<br><br>With endless appreciation,<br>Warren",
+                    image: "image2.png" // 
+                },
+                {
+                    text: "Happy Birthday, Sir warren! 🎉🎂<br><br>Wishing you the most joyful and memorable day as you celebrate another trip<br><br> around the sun! Your kindness, wisdom, and unwavering positivity make the world—and the people lucky enough to know you—so much better. You truly are an amazing human being, and today we celebrate not just your birthday, but the incredible light you bring into our lives. <br><br>Here’s to more adventures, more laughter, and all the happiness you deserve. Cheers to you, Sir Warren!<br><br> 🥂With admiration and best wishes,[Your Name or All of us who appreciate you]",
+                    image: "chatgpt.png" // No image
+                },
+                {
+                    text: "Birthday Wishes for Someone Truly Special! ✨<br><br>You have this incredible way of making the world a brighter, kinder place just by being in it.<br><br>Here's to you and to many more years of spreading your special kind of magic in this world.<br><br>With love and best wishes,<br>Warren",
+                    image: "image3.gif" 
+                },
+                {
+                    text: "Birthday Wishes for Someone Truly Special! ✨<br><br>You have this incredible way of making the world a brighter, kinder place just by being in it.<br><br>Here's to you and to many more years of spreading your special kind of magic in this world.<br><br>With love and best wishes,<br>Warren",
+                    image: "image3.gif" 
+                },
+                {
+                    text: "Birthday Wishes for Someone Truly Special! ✨<br><br>You have this incredible way of making the world a brighter, kinder place just by being in it.<br><br>Here's to you and to many more years of spreading your special kind of magic in this world.<br><br>With love and best wishes,<br>Warren",
+                    image: "image3.gif" 
+                },
+                {
+                    text: "Birthday Wishes for Someone Truly Special! ✨<br><br>You have this incredible way of making the world a brighter, kinder place just by being in it.<br><br>Here's to you and to many more years of spreading your special kind of magic in this world.<br><br>With love and best wishes,<br>Warren",
+                    image: "image3.gif" 
+                }
+            ];
+
+            
+            startButton.addEventListener('click', startExperience);
+
+            // --- Core Functions ---
+            function startExperience() {
+                document.getElementById('start-screen').classList.add('hide');
+                setTimeout(() => {
+                    mainContainer.style.display = 'block';
+                    musicControls.classList.add('show');
+                    initializeApp();
+                }, 1000);
+            }
+
+            function initializeApp() {
+                prevButton.addEventListener('click', previousLetter);
+                nextButton.addEventListener('click', nextLetter);
+                musicControls.addEventListener('click', toggleMusic);
+                document.addEventListener('keydown', handleKeyboardNav);
+                
+                backgroundMusic.volume = 0.3;
+                toggleMusic(true);
+                
+                initializeProgressDots();
+                displayLetter(currentLetterIndex);
+                createFloatingElements();
+            }
+
+            function displayLetter(index) {
+                if (typedInstance) typedInstance.destroy();
+                
+                // Hide the image from the previous letter
+                letterImageEl.classList.remove('show');
+                letterImageEl.src = ""; // Clear the source
+                
+                letterCountEl.textContent = `Message ${index + 1} of ${letters.length}`;
+                
+                const currentLetter = letters[index];
+
+                typedInstance = new Typed('#typed-text', {
+                    strings: [currentLetter.text],
+                    typeSpeed: 25,
+                    cursorChar: '▋',
+                    onComplete: (self) => {
+                        setTimeout(() => self.cursor.remove(), 500);
+                        // --- NEW: Check for an image and show it after typing is done ---
+                        if (currentLetter.image) {
+                            letterImageEl.src = currentLetter.image;
+                            setTimeout(() => { // A small delay before fading in
+                                letterImageEl.classList.add('show');
+                            }, 300);
+                        }
+                    }
+                });
+
+                updateProgressDots(index);
+                updateNavigationButtons();
+            }
+            
+            // --- Navigation and UI Update Functions ---
+            function nextLetter() {
+                if (currentLetterIndex < letters.length - 1) {
+                    currentLetterIndex++;
+                    displayLetter(currentLetterIndex);
+                    playClickSound();
+                }
+            }
+
+            function previousLetter() {
+                if (currentLetterIndex > 0) {
+                    currentLetterIndex--;
+                    displayLetter(currentLetterIndex);
+                    playClickSound();
+                }
+            }
+            
+            function goToLetter(index) {
+                if (index !== currentLetterIndex) {
+                    currentLetterIndex = index;
+                    displayLetter(currentLetterIndex);
+                    playClickSound();
+                }
+            }
+
+            function updateNavigationButtons() {
+                prevButton.classList.toggle('disabled', currentLetterIndex === 0);
+                nextButton.classList.toggle('disabled', currentLetterIndex === letters.length - 1);
+            }
+            
+            function initializeProgressDots() {
+                progressContainer.innerHTML = '';
+                letters.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('progress-dot');
+                    dot.addEventListener('click', () => goToLetter(index));
+                    progressContainer.appendChild(dot);
+                });
+            }
+
+            function updateProgressDots(activeIndex) {
+                const dots = document.querySelectorAll('.progress-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === activeIndex);
+                });
+            }
+
+            function handleKeyboardNav(e) {
+                if (e.key === 'ArrowLeft') previousLetter();
+                if (e.key === 'ArrowRight') nextLetter();
+            }
+
+            // --- Audio and Effects ---
+            function toggleMusic(forcePlay = false) {
+                const musicIcon = document.getElementById('music-icon');
+                if (forcePlay || backgroundMusic.paused) {
+                    backgroundMusic.play().then(() => {
+                        musicIcon.classList.replace('fa-volume-mute', 'fa-volume-up');
+                    }).catch(e => console.log('Autoplay was blocked by browser.'));
+                } else {
+                    backgroundMusic.pause();
+                    musicIcon.classList.replace('fa-volume-up', 'fa-volume-mute');
+                }
+            }
+
+            function playClickSound() {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            }
+
+            function createFloatingElements() {
+                const floatingItems = ['❤️', '✨', '⭐', '💖', '🧸', '🎉', '🎂'];
+                for (let i = 0; i < 15; i++) {
+                    const element = document.createElement('div');
+                    element.classList.add('floating-element');
+                    element.textContent = floatingItems[i % floatingItems.length];
+                    element.style.left = `${Math.random() * 100}%`;
+                    element.style.top = `${Math.random() * 100}%`;
+                    element.style.fontSize = `${15 + Math.random() * 15}px`;
+                    element.style.animationDuration = `${10 + Math.random() * 10}s`;
+                    element.style.animationDelay = `${Math.random() * 5}s`;
+                    document.body.insertBefore(element, mainContainer);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
