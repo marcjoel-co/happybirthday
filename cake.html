@@ -511,25 +511,17 @@
 
         
           candle.addEventListener("click", function() { blowOutCandle.call(this); });
-          candle.addEventListener("mouseover", function (e) {
-            if (e.buttons === 0) {
-                blowOutCandle.call(this);
-            }
-          });
-        }
+        };
       }
 
       // Blow out a candle when interacted with
       function blowOutCandle() {
         if (!this.classList.contains("blown")) {
-          // Play the blow sound effect
+          
           blowSound.currentTime = 0; // Rewind sound to start
           blowSound.play();
           
-          // Start background music on the first candle interaction if it's not already playing
-          if (backgroundMusic.paused) {
-            backgroundMusic.play().catch(e => console.log("Music play was interrupted."));
-          }
+         
 
           this.classList.add("blown");
           candlesBlown++;
@@ -539,6 +531,7 @@
           if (candlesBlown === totalCandles && !allCandlesBlown) {
             allCandlesBlown = true;
             setTimeout(showWishMessage, 1000); // full second
+         
           }
         }
       }
@@ -617,6 +610,9 @@
       function showWishMessage() {
         document.getElementById("wishMessage").classList.add("show");
         createFireworks();
+         if (backgroundMusic.paused) {
+            backgroundMusic.play().catch(e => console.log("Music play was interrupted."));
+          }
       }
 
       function closeWishMessage() {
