@@ -1,0 +1,407 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body
+{
+    background: linear-gradient(135deg, #f8e1f4, #e0c3f7, #c2e6ff);
+    background-size: 400% 400%;
+    animation: gradientBackground 15s ease infinite;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.start-screen
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 1s ease, visibility 1s ease;
+    color: #6a4c93;
+    text-align: center;
+}
+
+.start-screen.hide
+{
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.start-title
+{
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    animation: pulse 2s infinite;
+}
+
+.start-subtitle
+{
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.start-button
+{
+    background: linear-gradient(45deg, #6a4c93, #ff6b8a);
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+    padding: 20px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(106, 76, 147, 0.4);
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.start-button:hover
+{
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(106, 76, 147, 0.6);
+}
+
+/* Main Content Container */
+.container
+{
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1.5s forwards;
+}
+
+header
+{
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+h1
+{
+    font-size: 2.5rem;
+    color: #6a4c93;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Letter Section */
+.letter-counter
+{
+    text-align: center;
+    margin-bottom: 20px;
+    color: #6a4c93;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.letter-container
+{
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(106, 76, 147, 0.3);
+    margin-bottom: 30px;
+    min-height: 350px;
+    position: relative;
+}
+
+.letter
+{
+    font-size: 1.2rem;
+    color: #333;
+    flex: 2;
+    /* Takes up more space */
+}
+
+.letter-image
+{
+    flex: 1;
+    max-width: 35%;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.letter-image.show
+{
+    opacity: 1;
+    transform: scale(1);
+}
+
+.letter-navigation
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 30px;
+}
+
+.nav-button
+{
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid #6a4c93;
+    color: #6a4c93;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(106, 76, 147, 0.2);
+}
+
+.nav-button:hover:not(.disabled)
+{
+    background: #6a4c93;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.nav-button.disabled
+{
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.letter-progress
+{
+    display: flex;
+    gap: 8px;
+}
+
+.progress-dot
+{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(106, 76, 147, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.progress-dot.active
+{
+    background: #6a4c93;
+    transform: scale(1.3);
+}
+
+.progress-dot:hover
+{
+    background: #8e6ac5;
+}
+
+/* Back Button */
+.back-button-container
+{
+    text-align: center;
+}
+
+.back-button
+{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid #6a4c93;
+    color: #6a4c93;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover
+{
+    background: #6a4c93;
+    color: white;
+}
+
+.music-controls
+{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(106, 76, 147, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.music-controls.show
+{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.music-controls:hover
+{
+    transform: scale(1.1);
+}
+
+.music-controls i
+{
+    color: #6a4c93;
+    font-size: 24px;
+}
+
+.floating-element
+{
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 1;
+    animation: float 15s ease-in-out infinite alternate;
+}
+
+@keyframes fadeIn
+{
+    to
+    {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes gradientBackground
+{
+    0%
+    {
+        background-position: 0% 50%;
+    }
+    50%
+    {
+        background-position: 100% 50%;
+    }
+    100%
+    {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes float
+{
+    0%
+    {
+        transform: translateY(0px) rotate(0deg);
+    }
+    100%
+    {
+        transform: translateY(-40px) rotate(15deg);
+    }
+}
+
+@keyframes pulse
+{
+    0%,
+    100%
+    {
+        transform: scale(1);
+    }
+    50%
+    {
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 768px)
+{
+    h1
+    {
+        font-size: 2rem;
+    }
+
+    .container
+    {
+        padding: 15px;
+    }
+
+    .letter-container
+    {
+        flex-direction: column;
+        padding: 20px;
+        min-height: 400px;
+    }
+
+    .letter-image
+    {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .letter
+    {
+        font-size: 1.1rem;
+    }
+
+    .letter-navigation
+    {
+        padding: 0 10px;
+    }
+
+    .nav-button
+    {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+
+    .start-title
+    {
+        font-size: 2.5rem;
+    }
+
+    .start-subtitle
+    {
+        font-size: 1.2rem;
+    }
+
+    .start-button
+    {
+        font-size: 1.1rem;
+        padding: 15px 30px;
+    }
+}
+
+#typed-text {
+    
+    line-height: 1.7; /* You can move the line-height here from .letter */
+}
